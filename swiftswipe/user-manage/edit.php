@@ -1,74 +1,134 @@
-
-
-
-
-
-
 <?php
-// include database connection file
-include_once("config.php");
 
-// Check if form is submitted for user update, then redirect to homepage after update
-if(isset($_POST['update']))
-{
-	$id = $_POST['id'];
-
-	$fname=$_POST['fname'];
-	$lname=$_POST['lname'];
-	$email=$_POST['email'];
-	$password=$_POST['password'];
-
-
-	// update user data
-	$result = mysqli_query($mysqli, "UPDATE users SET fname='$fname',lname='$lname',email='$email',password='$password' WHERE id=$id");
-
-	// Redirect to homepage to display updated user in list
-    header("Location: index.php?success=Edited Successfully");
-}
-?>
-<?php
-// Display selected user data based on id
-// Getting id from url
+include '../config.php';
+session_start();
 $id = $_GET['id'];
 
-// Fetech user data based on id
-$result = mysqli_query($mysqli, "SELECT * FROM users WHERE id=$id");
+if(isset($_POST['update_profile'])){
 
-while($user_data = mysqli_fetch_array($result))
-{
-	$fname = $user_data['fname'];
-	$lname = $user_data['lname'];
-	$email = $user_data['email'];
-	$password = $user_data['password'];
+   $update_name = mysqli_real_escape_string($conn, $_POST['update_name']);
+   $update_email = mysqli_real_escape_string($conn, $_POST['update_email']);
+   $strand = mysqli_real_escape_string($conn, ($_POST['strand']));
+
+   mysqli_query($conn, "UPDATE `users` SET username = '$update_name', email = '$update_email' , department = '$strand' WHERE id = '$id'") or die('query failed');
+
+
+
+   $new_pass = mysqli_real_escape_string($conn, ($_POST['new_pass']));
+   $confirm_pass = mysqli_real_escape_string($conn, ($_POST['confirm_pass']));
+
+
+   if(!empty($new_pass) || !empty($confirm_pass)){
+      if($new_pass != $confirm_pass){
+         $message[] = 'confirm password not matched!';
+      }else{
+         mysqli_query($conn, "UPDATE `admint` SET password = '$confirm_pass' WHERE id = '$id'") or die('query failed');
+            header('location:index.php');
+      }
+   }
+
+   $update_image = $_FILES['update_image']['name'];
+   $update_image_size = $_FILES['update_image']['size'];
+   $update_image_tmp_name = $_FILES['update_image']['tmp_name'];
+   $update_image_folder = '../uploaded_img/'.$update_image;
+
+   if(!empty($update_image)){
+      if($update_image_size > 2000000){
+         $message[] = 'image is too large';
+      }else{
+         $image_update_query = mysqli_query($conn, "UPDATE `users` SET image = '$update_image' WHERE id = '$id'") or die('query failed');
+         if($image_update_query){
+            move_uploaded_file($update_image_tmp_name, $update_image_folder);
+         }
+         $message[] = 'image updated succssfully!';
+      }
+   }
 
 }
+
 ?>
-<html>
+
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<title>Edit User</title>
+<link rel="icon" href="../logo/logosystem.png">
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="user2.css">
+   <title>Edit User</title>
+
+   <!-- custom css file link  -->
+   <link rel="stylesheet" href="user1.css">
+
 </head>
-
 <body>
-	<a href="index.php">Cancel</a>
-	<br/><br/>
+   
+<div class="update-profile">
 
-	<form  method="post" action="edit.php">
+   <?php
+      $select = mysqli_query($conn, "SELECT * FROM `users` WHERE id = '$id'") or die('query failed');
+      if(mysqli_num_rows($select) > 0){
+         $fetch = mysqli_fetch_assoc($select);
+      }
+   ?>
 
-		
-				<input type="text" name="fname" value=<?php echo $fname;?>>
-	
-				<input type="text" name="lname" value=<?php echo $lname;?>>
+   <form action="" method="post" enctype="multipart/form-data">
+      <?php
+         if($fetch['image'] == ''){
+            echo '<img src="../images/default-avatar.png">';
+         }else{
+            echo '<img src="../uploaded_img/'.$fetch['image'].'">';
+         }
+         if(isset($message)){
+            foreach($message as $message){
+               echo '<div class="message">'.$message.'</div>';
+            }
+         }
+      ?>
 
-					
-				<input type="email" name="email" value=<?php echo $email;?>>
+         
 
-					
-				<input type="text" name="password" value=<?php echo $password;?>>
-	
-				<input type="hidden" name="id" value=<?php echo $_GET['id'];?>>
-				<td><input type="submit" name="update" value="Update"></td>
-			</tr>
-		</table>
-	</form>
+      <div class="flex">
+         <div class="inputBox">
+
+         <span>Username:</span>
+            <input type="text" name="update_name" value="<?php echo $fetch['username']; ?>" class="input1">
+            <span>Email:</span>
+            <input type="email" name="update_email" value="<?php echo $fetch['email']; ?>" class="box">
+            <span>Update Profile:</span>
+            <input type="file" name="update_image" accept="image/jpg, image/jpeg, image/png" class="box">
+         </div>
+         <div class="inputBox">
+         <span>Deparment:</span>
+
+<?php
+         include("../config.php");
+         include("fetch-strand.php");
+         ?>
+
+         <select name="strand" class="input1">
+         <option><?php echo $fetch['department']; ?></option>
+         <?php 
+         foreach ($options as $option) {
+         ?>
+            <option><?php echo $option['strandcode']; ?> </option>
+            <?php 
+            }
+         ?>
+         </select>
+            <span>New password :</span>
+            <input type="password" name="new_pass" placeholder="enter new password" class="box">
+            <span>Confirm password :</span>
+            <input type="password" name="confirm_pass" placeholder="confirm new password" class="box">
+         </div>
+      </div>
+      <input type="submit" value="Update" name="Save" class="btn">
+      <a href="index.php" class="delete-btn">Cancel</a>
+   </form>
+
+</div>
+
+
 </body>
 </html>

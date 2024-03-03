@@ -1,12 +1,12 @@
 <?php
 // include database connection file
-include_once("config.php");
+include_once("../config.php");
 
 // Get id from URL to delete that user
 $id = $_GET['id'];
 
 // Delete user row from table based on given id
-$result = mysqli_query($mysqli, "DELETE FROM section WHERE id=$id");
+$result = mysqli_query($conn, "DELETE FROM section WHERE id=$id");
 
 // After delete redirect to Home, so that latest user list will be displayed.
 header("Location: index.php?error=Deleted Successfully");

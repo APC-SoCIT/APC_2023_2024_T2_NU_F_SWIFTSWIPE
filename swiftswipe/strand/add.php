@@ -1,38 +1,41 @@
 <html>
 <head>
 	<title>Add Strand</title>
-	<link rel="stylesheet" href="../style.css">
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-	<link rel="icon" type="image/x-icon" href="../image/logo.png">
-</head>
+	<link rel="icon" href="../logo/logosystem.png">
+
+
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Language" content="en">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <meta name="description" content="This is an example dashboard created using build-in elements and components.">
+    <meta name="msapplication-tap-highlight" content="no">
+	<link rel="stylesheet" href="strand1.css">
+
+
+
+
+
 
 <body>
-<div class="d-flex min-vh-100 justify-content-center align-items-center">
-	<form action="add.php" method="post" name="form1">
-	<div class="d-flex flex-column bd-highlight mb-3">  
-	<div class="p-2 bd-highlight"> 
-	<a href="index.php"><i class="fa-solid fa-x fa-xl" style="color: #fb8787;"></i></a>
-	</div>
-	<div class="p-2 bd-highlight"> 
-	<h2 class="text-center textblue">ADD STRAND</h2>
-	</div>
 
-				<div class="p-2 bd-highlight"> 
-				<label>Strand Code</label>
-				<input type="text" class="inputtext2" name="strandcode" placeholder="Enter Strand Code">
-				</div>
-				<div class="p-2 bd-highlight">
-				<label>Strand Name</label>
-				<input type="text" class="inputtext2" name="strandname"  placeholder="Enter Strand Name" required>
-				</div>
-			    <div class="p-2 bd-highlight">
-				<button class="greenbutton" type="submit" name="Submit" value="Add">Add</button>
-				</div>
-				</div>
+
+
+<div class="form-container">
+	<form action="add.php" method="post" name="form1">
+	<h3>Add New Strand</h3>
+				<input type="text" class="box" name="strandcode" placeholder="Enter Strand Code" required>
+	
+				<input type="text" class="box" name="strandname"  placeholder="Enter Strand Name" required>
+	
+				<button type="submit" name="Submit" class ="btn">Save</button>
+				<a href="index.php" class="delete-btn">Cancel</a>
 
 	</form>
-</div>
+	</div>
 	<?php
 
 	// Check If form submitted, insert form data into users table.

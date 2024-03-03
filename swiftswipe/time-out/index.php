@@ -2,10 +2,10 @@
 
 <html>  
 <head>  
-    <title>TIME OUT</title>  
-    <link rel="stylesheet" href="../style.css">
-    <link rel="stylesheet" href="../input.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Time Out</title> 
+    <link rel="icon" type="image/x-icon" href="../logo/logosystem.png"> 
+    <link rel="stylesheet" href="timeout1.css">
+   
     <script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>  
@@ -33,16 +33,20 @@ $result = $conn->query($sql);
 </style>
 
 
-<body class="bg">  
+<body>  
 
-<form name="f1" action = "../time-out/auth.php" method = "POST">  
-                <input autocomplete="false" class="hiddeninput" type = "text" id ="user" name="user" />  
+
+
+        <form  name="f1" action = "../time-out/auth.php" method = "POST">  
+                <input autocomplete="off" class="hiddeninput" type = "text" id ="user" name="user">  
         </form>  
 
     </div>  
 
-    <div class="d-flex min-vh-100 justify-content-center align-items-center">
-    <div class="divcolorwhite p-3">
+    <div  class="d-flex min-vh-100 justify-content-center align-items-center">
+    <div  style="background-color:#ffffff; border-radius:10px; box-shadow: 0px 10px 46px -7px rgba(0,0,0,0.64);
+-webkit-box-shadow: 0px 10px 46px -7px rgba(0,0,0,0.64);
+-moz-box-shadow: 0px 10px 46px -7px rgba(0,0,0,0.64);">
         <?php
 
             if ($result->num_rows > 0) {
@@ -52,38 +56,36 @@ $result = $conn->query($sql);
 
         ?>
 
-                <div class="d-flex flex-column mb-3">
 
-                <div class="p-2">
-                <?php if (isset($_GET['error'])) { ?>
-                <p class="error"><?php echo $_GET['error']; ?></p>
+
+
+                   <div class="bg">
+                <div class="container">
+                    <div class="user-image">
+                    <img class="img" src=../uploaded_img/<?php echo $row['pp']?>>
+                    </div>
+            
+                    <div class="content">
+                        <h3 class="name"><?php echo $row['fname']," ", $row['lname']; ?></h3>
+                        <p class="username"><?php echo $row['grade']; ?></p>
+            
+            
+            
+                        <p class="details">
+                        <?php echo $row['strand']; ?>
+                        </p>
+            
+                        <p class="details">
+                        <?php echo $row['logTime']; ?>
+                        </p>
+                   
+                        <?php if (isset($_GET['error'])) { ?>
+                <p class="effect effect-4"><?php echo $_GET['error']; ?></p>
                 <?php } ?>
+         
+                    
+                    </div>
                 </div>
-
-
-                <div class="p-2">
-
-                <div class="d-flex flex-row  mb-3">
-
-                <img src=../studentl/<?php echo $row['pp']?> width='355px' height ='355px'>
-
-                <div class="d-flex flex-column mb-3">
-                <div class="m-3">
-                <p class="uppercase" id="rfidcard">NAME: <?php echo $row['fname']," ", $row['lname']; ?></p>
-                </div>
-                <div class="m-3">
-                <p class="uppercase" id="name">Strand: <?php echo $row['strand']; ?></p>
-                </div>
-                <div class="m-3">
-                <p class="uppercase" id="strand">SECTION: <?php echo $row['section']; ?></p>
-                </div>
-                <div class="m-3">
-                <p class="uppercase" id="section">DATE/TIME: <?php echo $row['logTime']; ?></p>
-                </div>
-                </div>
-                </div>
-                </div>
-
                 </div>
 
         <?php       } 
@@ -99,6 +101,7 @@ $result = $conn->query($sql);
       </div>
         </div>
 
+        	
 
 <script>
     
@@ -117,7 +120,7 @@ $('#user').keyup(function(){
         $("rfidcard").show();
         $("name").show();
         $("strand").show();
-        $("section").show();
+        $("grade").show();
         $("time").show();
         
     }
@@ -130,5 +133,8 @@ $('#user').keyup(function(){
 });
 
 </script>
+
+
+
 </body>     
 </html>  

@@ -1,52 +1,56 @@
-<?php 
-session_start(); 
-include "db_conn.php";
+<?php
 
-if (isset($_POST['uname']) && isset($_POST['password'])) {
+include '../config.php';
+session_start();
 
-	function validate($data){
-       $data = trim($data);
-	   $data = stripslashes($data);
-	   $data = htmlspecialchars($data);
-	   return $data;
-	}
+if(isset($_POST['submit'])){
 
-	$uname = validate($_POST['uname']);
-	$pass = validate($_POST['password']);
+   $email = mysqli_real_escape_string($conn, $_POST['email']);
+   $pass = mysqli_real_escape_string($conn, ($_POST['password']));
 
-	if (empty($uname)) {
-		header("Location: ../index.php?error=Email is required");
-	    exit();
-	}else if(empty($pass)){
-        header("Location: ../index.php?error=Password is required");
-	    exit();
-	}else{
+   $select = mysqli_query($conn, "SELECT * FROM `users` WHERE email = '$email' AND password = '$pass'") or die('query failed');
 
-        
-		$sql = "SELECT * FROM users WHERE email='$uname' AND password='$pass'";
+   if(mysqli_num_rows($select) > 0){
+      $row = mysqli_fetch_assoc($select);
+      $_SESSION['id'] = $row['id'];
+      header('location:home.php');
+   }else{
+      $message[] = 'incorrect email or password!';
+   }
 
-		$result = mysqli_query($conn, $sql);
-
-		if (mysqli_num_rows($result) === 1) {
-			$row = mysqli_fetch_assoc($result);
-            if ($row['email'] === $uname && $row['password'] === $pass) {
-            	$_SESSION['email'] = $row['email'];
-            	$_SESSION['fname'] = $row['fname'];
-                $_SESSION['lname'] = $row['lname'];
-            	$_SESSION['id'] = $row['id'];
-            	header("Location: home.php");
-		        exit();
-            }else{
-				header("Location: ../index.php?error=Incorect Email or password");
-		        exit();
-			}
-		}else{
-			header("Location: ../index.php?error=Incorect Email or password");
-	        exit();
-		}
-	}
-	
-}else{
-	header("Location: ../index.php");
-	exit();
 }
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="user1.css">
+   <title>login</title>
+
+</head>
+<body>
+   
+<div class="form-container">
+
+   <form action="" method="post" enctype="multipart/form-data">
+      <h3>login</h3>
+      <?php
+      if(isset($message)){
+         foreach($message as $message){
+            echo '<div class="message">'.$message.'</div>';
+         }
+      }
+      ?>
+      <input type="email" name="email" placeholder="enter email" class="box" required>
+      <input type="password" name="password" placeholder="enter password" class="box" required>
+      <input type="submit" name="submit" value="login now" class="btn">
+   </form>
+
+</div>
+
+</body>
+</html>
